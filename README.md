@@ -25,8 +25,6 @@ The important info:
 
 To Do:
 ---------
-add one way movement tiles ' v, ^, <, >, '.
-
 add inbetween screen for stages.
 
 add saving level.
@@ -43,11 +41,17 @@ write tutorial to add levels(ez pz);
 
 better document code
 
+add levels with gate tiles
+
 
 
 Maybes:
 -----------
 add a button and gate tile (would need an aditional class prob)
+
+Done:
+--------
+add one way movement tiles ' v, ^, <, >, '.
 
 add a background music theme.
 
