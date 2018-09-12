@@ -25,15 +25,15 @@ The important info:
 
 To Do:
 ---------
-*add inbetween screen for stages.
-*add saving level.
-*add level select screen.
-*implement art.
-*make pause screen not horrible.
-*add tutorial page.
-*write tutorial to add levels(ez pz);
-*better document code
-*add levels with gate tiles
+* add inbetween screen for stages.
+* add saving level.
+* add level select screen.
+* implement art.
+* make pause screen not horrible.
+* add tutorial page.
+* write tutorial to add levels(ez pz);
+* better document code
+* add levels with gate tiles
 
 
 
