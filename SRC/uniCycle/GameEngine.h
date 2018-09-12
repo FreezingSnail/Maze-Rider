@@ -7,11 +7,12 @@
 
 class GameEngine{
   private:
-    const char * const *  floors[2] { levelOne, levelTwo};
+    const char * const *  floors[3] { testlevel, levelOne, levelTwo};
     Character character;
     uint8_t level;
     uint8_t floorLevel;
     bool uniParts[5] = { false, false, false, false, false };
+    char floorArray[190] {};
     GameState STATE = GameState::SPLASH;
 
 
@@ -39,6 +40,10 @@ class GameEngine{
     void nextLevel();
 
     void winScreen();
-
+    
+    void unpackFloor();
+    void replaceChar(char part);
+    void writeOver();
+    
 };
 
