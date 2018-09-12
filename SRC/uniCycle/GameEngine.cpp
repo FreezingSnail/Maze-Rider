@@ -2,6 +2,7 @@
 #include "Quads.h"
 #include "Globals.h"
 #include "TileInterpreter.h"
+#include "bmp.h"
 
 // ~ index 95 x2  [0]
 // o index 46 x3  [1]
@@ -100,14 +101,14 @@ bool GameEngine::allParts(){
     return false;
 }
 
-void GameEngine::testfloor(){
+/*void GameEngine::testfloor(){
   if(arduboy.justPressed(DOWN_BUTTON))
     ++level;
   else if(arduboy.justPressed(UP_BUTTON))
     --level;
 }
 
-/*void GameEngine::nextLevel(){
+void GameEngine::nextLevel(){
 //  if(arduboy.justPressed(A_BUTTON)){
     character.newLevel();
     resetParts();
@@ -197,11 +198,11 @@ void GameEngine::pauseMenu(){
 }
 
 void GameEngine::pause(){
-  if(arduboy.justPressed(A_BUTTON))
-    if(STATE == GameState::MAZE)
-      STATE == GameState::MENU;
-    else
-      STATE == GameState::MAZE;
+  if(arduboy.justPressed(A_BUTTON)){
+      setState(GameState::MENU);}
+  if(arduboy.justPressed(B_BUTTON)) {
+      setState(GameState::MAZE);
+  }
 }
 
 /*  wheel,
@@ -230,11 +231,14 @@ void GameEngine::printParts(){
 }
 
 void GameEngine::printMapInfo(){
-  arduboy.setCursor(10,10);
+  arduboy.drawBitmap(0,0, pauseScreen, 121, 64, WHITE);
+ 
   arduboy.print(F("Level: "));
-  arduboy.println(level);
+  arduboy.println(level+1);
+
   arduboy.print(F("Floor: "));
   arduboy.println(floorLevel);
+  
 }
 
 void GameEngine::nextLevel(){
