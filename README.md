@@ -6,9 +6,18 @@ This is a simple maze wandering game where you seek the 5 pieces of a unicycle. 
 The important info:
 
     Character: C
+    
+    //Move between floor tiles
     Upstairs: U
     Downstairs: D
+    
+    //move through in one direction tiles
+    Left Gate: <
+    Right Gate: >
+    Upwards Gate: ^
+    Downwards Gate: v
 
+    //part tiles
     Parts:
     Seat: ~
     Stem: l
