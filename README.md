@@ -25,34 +25,25 @@ The important info:
 
 To Do:
 ---------
-add inbetween screen for stages.
-
-add saving level.
-
-add level select screen.
-
-implement art.
-
-make pause screen not horrible.
-
-add tutorial page.
-
-write tutorial to add levels(ez pz);
-
-better document code
-
-add levels with gate tiles
+*add inbetween screen for stages.
+*add saving level.
+*add level select screen.
+*implement art.
+*make pause screen not horrible.
+*add tutorial page.
+*write tutorial to add levels(ez pz);
+*better document code
+*add levels with gate tiles
 
 
 
 Maybes:
 -----------
-add a button and gate tile (would need an aditional class prob)
+*add a button and gate tile (would need an aditional class prob)
+*add a background music theme.
+*write a cheeseball story page
+
 
 Done:
 --------
-add one way movement tiles ' v, ^, <, >, '.
-
-add a background music theme.
-
-write a cheeseball story page
+*add one way movement tiles ' v, ^, <, >, '.
