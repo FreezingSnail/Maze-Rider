@@ -39,11 +39,11 @@ To Do:
 
 Maybes:
 -----------
-*add a button and gate tile (would need an aditional class prob)
-*add a background music theme.
-*write a cheeseball story page
+* add a button and gate tile (would need an aditional class prob)
+* add a background music theme.
+* write a cheeseball story page
 
 
 Done:
 --------
-*add one way movement tiles ' v, ^, <, >, '.
+* add one way movement tiles ' v, ^, <, >, '.
