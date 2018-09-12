@@ -7,17 +7,20 @@ The important info:
 
     Character: C
     
-    //Move between floor tiles
+    Move between floor tiles:
+    -------------------------
     Upstairs: U
     Downstairs: D
     
-    //move through in one direction tiles
+    Move through in one direction tiles:
+    ------------------------------------
     Left Gate: <
     Right Gate: >
     Upwards Gate: ^
     Downwards Gate: v
 
-    //part tiles
+    Part tiles:
+    -----------
     Parts:
     Seat: ~
     Stem: l
@@ -48,9 +51,11 @@ To Do:
 
 Maybes:
 -----------
-* add a button and gate tile (would need an aditional class prob)
+* add a button and gate tile (would need an aditional class prob).
 * add a background music theme.
-* write a cheeseball story page
+* write a cheeseball story page.
+* add pushable tile.
+
 
 
 Done:
