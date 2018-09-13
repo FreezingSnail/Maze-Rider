@@ -37,7 +37,7 @@ The important info:
 
 To Do:
 ---------
-* add inbetween screen for stages.
+* make inbetween screen for stages pleasent.
 * add saving level.
 * add level select screen.
 * implement art.
@@ -61,3 +61,4 @@ Maybes:
 Done:
 --------
 * add one way movement tiles ' v, ^, <, >, '.
+* add inbetween screen for stages
