@@ -39,13 +39,13 @@ To Do:
 ---------
 * make inbetween screen for stages pleasent.
 * add saving level.
-* add level select screen.
+* make level select not awful to look at.
 * implement art.
 * make pause screen not horrible.
 * add tutorial page.
 * write tutorial to add levels(ez pz);
 * better document code
-* add levels with gate tiles
+* add levels
 
 
 
@@ -62,3 +62,5 @@ Done:
 --------
 * add one way movement tiles ' v, ^, <, >, '.
 * add inbetween screen for stages
+* add level select screen.
+* add level with gate tiles
