@@ -1,6 +1,7 @@
 #include "TileInterpreter.h"
 #include "Quads.h"
-// char open = " ";
+
+
 
 bool movable(char tileChar){
   if(tileChar == (pgm_read_byte_near(SEAT)) || tileChar == (pgm_read_byte_near(STEM)) || tileChar == (pgm_read_byte_near(WHEEL)) || tileChar == (pgm_read_byte_near(PEDDELS)) || tileChar == (pgm_read_byte_near(CRANK)) || tileChar == (pgm_read_byte_near(OPENSPACE))  || tileChar == (pgm_read_byte_near(UPSTAIR)) || tileChar == (pgm_read_byte_near(DOWNSTAIR)) )
@@ -38,4 +39,11 @@ Parts isPart(char tileChar){
     return Parts::nothing;
 }
 
+bool validMoveGate(char tile, const char* gateType){
+  return (tile == static_cast<char>(pgm_read_byte_near(gateType)));
+}
+
+char printtile(char tile){
+  return tile;
+}
 

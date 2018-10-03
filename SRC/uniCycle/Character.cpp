@@ -14,12 +14,6 @@ const char characterTile[] PROGMEM = "C";
 
 Character::Character() {
   charTile = characterTile;
-  index = 73;
-  moved = false;
-
-  xLoc = xFromQuadIndex(index);
-  yLoc = yFromQuadIndex(index);
-
 }
 
 void Character::moveChar(bool canMove) {

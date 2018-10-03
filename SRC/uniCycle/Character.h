@@ -1,17 +1,18 @@
 #pragma once
 #include "Quads.h"
+#include "utils.h"
 #include <stdint.h>
 
 
 class Character{
   private:
       const char * charTile;
-      uint8_t index;
+      uint8_t index { 73 };
 
-      uint8_t xLoc; //multiple of 6
-      uint8_t yLoc; //multiple of 6
-      int steps{0};
-      bool moved;
+      uint8_t xLoc { xFromQuadIndex(index) }; //multiple of 6
+      uint8_t yLoc { yFromQuadIndex(index) }; //multiple of 6
+      int steps { 0 };
+      bool moved { false };
     
 
   public: 

@@ -7,7 +7,9 @@
 #include "Quads.h"
 #include "bmp.h"
 // Arduboy2 arduboy; 
- 
+
+GameEngine game = GameEngine();
+
 
 void setup() {
   arduboy.begin();
@@ -20,7 +22,6 @@ void setup() {
 
 void loop() {
 
-  static GameEngine game = GameEngine();
 
   if(!arduboy.nextFrame()){
     return;
@@ -34,7 +35,7 @@ void loop() {
       //print splashscreen function
     arduboy.drawBitmap(0,0, splashScreen, 121, 64, WHITE);
       if(arduboy.justPressed(A_BUTTON))
-        game.setState(GameState::MAZE);
+        game.setState(GameState::SELECT);
      // if(arduboy.justPressed(B_BUTTON))
        // game.setState(GameState::HELP);      
       break;
@@ -44,14 +45,23 @@ void loop() {
       if(arduboy.justPressed(B_BUTTON))
         game.setState(GameState::SPLASH);
         break;  
+
+     case GameState::SELECT:
+     // level select screen
+     game.levelSelect();
+     break;
       
     case GameState::MAZE:
       game.draw();
       game.Update();
-      break;
+      break;  
 
     case GameState::MENU:
       game.pauseMenu();
+      break;
+
+    case GameState::NEXTLEVEL:
+      game.nextLevelScreen();
       break;
 
     case GameState::WIN:

@@ -7,43 +7,45 @@
 
 class GameEngine{
   private:
-    const char * const *  floors[3] { testlevel, levelOne, levelTwo};
-    Character character;
-    uint8_t level;
-    uint8_t floorLevel;
+    
+    const char * const *  floors[MAX_LEVEL] {levelOne, levelTwo, levelThree};
+    Character character{};
+    uint8_t level{ 0 };
+    uint8_t floorLevel { 0 };
     bool uniParts[5] = { false, false, false, false, false };
     char floorArray[190] {};
-    GameState STATE = GameState::SPLASH;
+    GameState STATE { GameState::SPLASH };
 
+    bool Move();                  //determine if moveable tile at selected destination
+    char getCharAtCharacter();    //return tile at character location
+    void getPart(Parts part);     //update part array to true at part index
+    bool allParts();              //check if all parts have been collected
+
+    void pause();                 //switch between pause and maze state
+    
+    void resetParts();            //set part bool array to false
+    void printParts();            //display collect parts on pause screen
+    void printMapInfo();          //print level and floor currently on
+    void nextLevel();             //advances to next level and resets level initialisers
+    
+    void unpackFloor();           //load floor data into ram
+    void replaceChar(char part);  //replace part tile with blank tile
+    void writeOver();             //check to see if part tiles need to be written over
 
   public:
-    GameEngine();
-    void draw();
-    bool Move();
-    void Update();
-    char getCharAtCharacter();          
-    void getPart(Parts part);
-    bool allParts();
-    void testfloor();
-    void hideParts();
-    //void nextLevel();
-    
-    
-    GameState getState();
-    void setState(GameState state);
+    GameEngine();                 //constructor
+    void draw();                  //draw game and character
+    void Update();                //step game logic
 
-    void pauseMenu();
-    void pause();
-    void resetParts();
-    void printParts();
-    void printMapInfo();
-    void nextLevel();
-
-    void winScreen();
+    void pauseMenu();             //display pause screen
+    void winScreen();             //display win screen
     
-    void unpackFloor();
-    void replaceChar(char part);
-    void writeOver();
+    GameState getState();         //return current GameState
+    void setState(GameState state);//Set GameState
+
+    void nextLevelScreen();        //next level screen
+    void levelSelect();            //select screen;
+
     
 };
 

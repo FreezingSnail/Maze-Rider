@@ -11,10 +11,6 @@
 // z index 17 x4  [4]
 
 GameEngine::GameEngine(){
-  floors;
-  character = Character();
-  level = 0;
-  floorLevel = 0;
   unpackFloor();
 
 }
@@ -27,35 +23,29 @@ void GameEngine::draw(){
     arduboy.print(floorArray[index]);
   }
   
-  //hideParts();
+
   character.printChar(); 
-//  arduboy.setCursor(0,0);
-//  arduboy.print(character.getY());
-
-
-    
-
-  
 }
+
 
 bool GameEngine::Move(){
 //array[width * row + col]
 
   if(arduboy.justPressed(UP_BUTTON)){
-    return (movable(floorArray[indexAbove(character.getIndex())]) && character.getY() >6 );
+    return ((movable(floorArray[indexAbove(character.getIndex())]) || validMoveGate(floorArray[indexAbove(character.getIndex())], UPGATE)) && character.getY() >6 );
     
   }
   else if(arduboy.justPressed(DOWN_BUTTON)){
-    return (movable(floorArray[indexBelow(character.getIndex())]) && character.getY() < 51);
+    return ((movable(floorArray[indexBelow(character.getIndex())]) || validMoveGate(floorArray[indexBelow(character.getIndex())], DOWNGATE)) && character.getY() < 51);
     
   } 
   else if(arduboy.justPressed(LEFT_BUTTON)){
-    return (movable(floorArray[character.getIndex()-1]) && character.getX() >= 1);
+    return ((movable(floorArray[character.getIndex()-1]) || validMoveGate(floorArray[(character.getIndex()-1)], LEFTGATE)) && character.getX() >= 1);
     
   }
       
   else if(arduboy.justPressed(RIGHT_BUTTON)){
-    return (movable(floorArray[character.getIndex()+1]) && character.getX() <120 );
+    return ((movable(floorArray[character.getIndex()+1]) || validMoveGate(floorArray[(character.getIndex()+1)], RIGHTGATE)) && character.getX() <120 );
     
   }
       
@@ -141,7 +131,6 @@ void GameEngine::pauseMenu(){
   pause();
   printParts();
   printMapInfo();
-  
 }
 
 void GameEngine::pause(){
@@ -194,14 +183,15 @@ void GameEngine::printMapInfo(){
 }
 
 void GameEngine::nextLevel(){
-  if(allParts() && level == 0){
+  if(allParts()){
     character.newLevel();
     resetParts();
     floorLevel = 0;
     ++level;
     unpackFloor();
+    setState(GameState::NEXTLEVEL);
   }
-  else if(allParts() && level != 0)
+  else if(allParts() && level == MAX_LEVEL)
     STATE = GameState::WIN;
     
 }
@@ -246,4 +236,38 @@ void GameEngine::writeOver(){
     replaceChar(static_cast<char>(pgm_read_byte_near(&CRANK)));
 }    
 
+
+void GameEngine::nextLevelScreen(){
+  arduboy.print(F("Entering Level: "));
+  arduboy.println(level + 1);
+  arduboy.println(F("A to continue."));
+  if(arduboy.justPressed(A_BUTTON)){
+    setState(GameState::MAZE);
+  }
+}
+
+void GameEngine::levelSelect(){
+  for(int x = 1; x <= MAX_LEVEL; x++){
+    arduboy.print(F("Level "));
+    arduboy.println(x);
+  }
+  arduboy.println();
+  
+  static int levelSelected = 1;
+  arduboy.print(F("Level selected: "));
+  arduboy.println(levelSelected);
+
+  if(arduboy.justPressed(UP_BUTTON)) --levelSelected;
+  if(arduboy.justPressed(DOWN_BUTTON)) ++levelSelected;
+
+  if(levelSelected < 1) levelSelected = MAX_LEVEL;
+  if(levelSelected > MAX_LEVEL) levelSelected = 1;
+
+  if(arduboy.justPressed(B_BUTTON)) {
+    level = (levelSelected - 1);
+    unpackFloor();
+    STATE = GameState::MAZE;
+  }
+  
+}
 
