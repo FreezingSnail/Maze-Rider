@@ -58,6 +58,15 @@ bool GameEngine::Move(){
 void GameEngine::Update(){
   //unpackFloor();
   character.moveChar(Move());
+  if(Move()){
+    if(isButton(getCharAtCharacter())){
+      if(buttonPressed)
+        buttonPressed = false;
+      else 
+        buttonPressed = true;
+        gateOperation();
+    }
+  }
   //testfloor();
   
   if(upStair(getCharAtCharacter()) && character.didMoved()){
@@ -77,7 +86,6 @@ void GameEngine::Update(){
   pause();
 
   writeOver();
-  
   
 }
 
@@ -179,6 +187,8 @@ void GameEngine::printMapInfo(){
 
   arduboy.print(F("Floor: "));
   arduboy.println(floorLevel);
+  arduboy.println(hasButton);
+  arduboy.println(buttonPressed);
   
 }
 
@@ -205,15 +215,30 @@ void GameEngine::winScreen(){
 }
 
 void GameEngine::unpackFloor(){
-  for(uint8_t i = 0; i < 189; ++i)
+  hasButton = false;
+  buttonPressed = false;
+  for(uint8_t i = 0; i < 189; ++i){
     floorArray[i] = static_cast<char>(pgm_read_byte_near(&floors[level][floorLevel][i]));
+    if (isButton(pgm_read_byte_near(&floors[level][floorLevel][i])))
+      hasButton = true;
+  }
 }
 
-void GameEngine::replaceChar(char part){
+void GameEngine::replaceChar(char part, char replacement){
   for(uint8_t i = 0; i < 189; ++i){
         if(floorArray[i] == part)
-          floorArray[i] = static_cast<char>(pgm_read_byte_near(&open));
-      }
+          floorArray[i] = replacement;
+      }    
+}
+
+void GameEngine::gateOperation(){
+  if(buttonPressed)
+    replaceChar(static_cast<char>(pgm_read_byte_near(&CLOSEDGATE)), static_cast<char>(pgm_read_byte_near(&OPENGATE)));
+   else
+     replaceChar(static_cast<char>(pgm_read_byte_near(&OPENGATE)), static_cast<char>(pgm_read_byte_near(&CLOSEDGATE)));
+
+   
+    
 }
 
 void GameEngine::writeOver(){
@@ -224,16 +249,16 @@ void GameEngine::writeOver(){
 // z index   [4]
 
   if(uniParts[0]){
-      replaceChar(static_cast<char>(pgm_read_byte_near(&WHEEL)));
+      replaceChar(static_cast<char>(pgm_read_byte_near(&WHEEL)), static_cast<char>(pgm_read_byte_near(&OPENSPACE)));
   }
   if(uniParts[1])
-    replaceChar(static_cast<char>(pgm_read_byte_near(&STEM)));
+    replaceChar(static_cast<char>(pgm_read_byte_near(&STEM)), static_cast<char>(pgm_read_byte_near(&OPENSPACE)));
   if(uniParts[2])
-    replaceChar(static_cast<char>(pgm_read_byte_near(&SEAT)));    
+    replaceChar(static_cast<char>(pgm_read_byte_near(&SEAT)), static_cast<char>(pgm_read_byte_near(&OPENSPACE)));    
   if(uniParts[3])
-    replaceChar(static_cast<char>(pgm_read_byte_near(&PEDDELS))); 
+    replaceChar(static_cast<char>(pgm_read_byte_near(&PEDDELS)), static_cast<char>(pgm_read_byte_near(&OPENSPACE))); 
   if(uniParts[4])
-    replaceChar(static_cast<char>(pgm_read_byte_near(&CRANK)));
+    replaceChar(static_cast<char>(pgm_read_byte_near(&CRANK)), static_cast<char>(pgm_read_byte_near(&OPENSPACE)));
 }    
 
 
@@ -247,15 +272,16 @@ void GameEngine::nextLevelScreen(){
 }
 
 void GameEngine::levelSelect(){
-  for(int x = 1; x <= MAX_LEVEL; x++){
-    arduboy.print(F("Level "));
-    arduboy.println(x);
-  }
-  arduboy.println();
+  
   
   static int levelSelected = 1;
-  arduboy.print(F("Level selected: "));
-  arduboy.println(levelSelected);
+  arduboy.print(F("Level "));
+  if(levelsCleared[levelSelected]){
+    arduboy.println(levelSelected);
+  }
+  else {
+    arduboy.print(levelSelected); 
+    arduboy.println(F(" Locked"));}
 
   if(arduboy.justPressed(UP_BUTTON)) --levelSelected;
   if(arduboy.justPressed(DOWN_BUTTON)) ++levelSelected;
@@ -263,7 +289,7 @@ void GameEngine::levelSelect(){
   if(levelSelected < 1) levelSelected = MAX_LEVEL;
   if(levelSelected > MAX_LEVEL) levelSelected = 1;
 
-  if(arduboy.justPressed(B_BUTTON)) {
+  if(arduboy.justPressed(A_BUTTON)) {
     level = (levelSelected - 1);
     unpackFloor();
     STATE = GameState::MAZE;

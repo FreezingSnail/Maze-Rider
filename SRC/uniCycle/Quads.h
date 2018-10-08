@@ -34,13 +34,17 @@ const char PROGMEM RIGHTGATE[] = ">";
 const char PROGMEM UPGATE[] = "^";
 const char PROGMEM DOWNGATE[] = "v";
 
+const char PROGMEM BUTTON[] = "@";
+const char PROGMEM CLOSEDGATE[] = "*";
+const char PROGMEM OPENGATE[] = "#";
+
 const char PROGMEM WHEEL[] = "o";
 const char PROGMEM STEM[] = "l";
 const char PROGMEM SEAT[] = "~";
 const char PROGMEM PEDDELS[] = "=";
 const char PROGMEM CRANK[] = "z";
 
-const char PROGMEM TEST[] = "~ o l z =                                           ^      v    <   >                                                                                                                       ";
+const char PROGMEM TEST[] = "~ o l z =           #             @                 ^      v    <   >          *                                                                                                            ";
 
 const char PROGMEM l1x1[] = "||   || ----|D    D|D|| D || || | -| |    ||   || |- -| | |----|z| |   |   |   ||D| | |D|-| |   |--- | | | |-|D| |   |    |   |     | |- -| |=||-- ------| ||D|| |--|           |---|      --";
 const char PROGMEM l1x2[] = "|---  -------U--   |U|D  |            |-| |   | |---- | |  |D| |-|-| |  ---| D| |U|l~ |U| |-         |-|-  | |U  |---|--|       | |----   ---| ||    |       U           D----------------  D";
@@ -57,7 +61,7 @@ const char PROGMEM l3x2[] = " |            U| |  U |^------| ||  | |v|  |^   D--
 const char PROGMEM l3x3[] = "| <<<< |------------|| |l<<  >>>>>>>>>  ||  | >>U   < |v--|| || |>v----| vv| --||U|| |>v----|   <   |---|  > <|  >>>>> | |U    ||v||U >>>> -|o|--- --|     >>>  -|-|    --|--| <<<<<      --U";
 
 
-const uint8_t MAX_LEVEL { 3 };
+const uint8_t MAX_LEVEL { 4 };
 
 const char * const testlevel[] {TEST};
 
