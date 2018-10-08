@@ -44,14 +44,13 @@ To Do:
 * make pause screen not horrible.
 * add tutorial page.
 * write tutorial to add levels(ez pz);
-* better document code
-* add levels
+* better document code (never ending)
+* add levels (at least one with the gate)
 
 
 
 Maybes:
 -----------
-* add a button and gate tile (would need an aditional class prob).
 * add a background music theme.
 * write a cheeseball story page.
 * add pushable tile.
@@ -64,3 +63,5 @@ Done:
 * add inbetween screen for stages
 * add level select screen.
 * add level with gate tiles
+* add a button and gate tile (would need an aditional class prob). (It didn't)
+
