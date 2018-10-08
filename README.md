@@ -18,6 +18,12 @@ The important info:
     Right Gate: >
     Upwards Gate: ^
     Downwards Gate: v
+    
+    Special Tiles: 
+    --------------
+    Closed Gate: * (Can't move through)
+    Open Gate: # (Can move through)
+    Gate Button: @ (Toggles gate state)
 
     Part tiles:
     -----------
