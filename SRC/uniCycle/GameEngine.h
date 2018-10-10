@@ -34,8 +34,8 @@ class GameEngine{
     void unpackFloor();           //load floor data into ram
     void replaceChar(char part, char replacement);  //replace part tile with blank tile
     void writeOver();             //check to see if part tiles need to be written over
-    void gateOperation();
-    
+    void gateOperation();         //Swaps gate tile on button press    ￼
+    void drawBMP(char tile, uint8_t index); //Draws correct tileBMP from char
 
   public:
     GameEngine();                 //constructor

@@ -19,11 +19,10 @@ void GameEngine::draw(){
 
   
   for(uint8_t index = 0; index <= 188; ++index){
-    arduboy.setCursor(xFromQuadIndex(index), yFromQuadIndex(index));
-    arduboy.print(floorArray[index]);
+    //arduboy.setCursor(xFromQuadIndex(index), yFromQuadIndex(index));
+    drawBMP(floorArray[index], index);
   }
   
-
   character.printChar(); 
 }
 
@@ -295,5 +294,34 @@ void GameEngine::levelSelect(){
     STATE = GameState::MAZE;
   }
   
+}
+
+void GameEngine::drawBMP(char tile, uint8_t index){
+   if(tile == pgm_read_byte_near(DASH) || tile == pgm_read_byte_near(VERTICAL))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), walls, 6, 7, WHITE);
+   else if(tile == pgm_read_byte_near(DOWNSTAIR))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), DStair, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(UPSTAIR))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UStair, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(LEFTGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), LGate, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(RIGHTGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), RGate, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(UPGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UGate, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(DOWNGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), DGate, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(WHEEL))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UWheel, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(STEM))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UStem, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(SEAT))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), USeat, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(PEDDELS))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UPedals, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(CRANK))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UCrank, 6, 7, WHITE);
+
+
 }
 

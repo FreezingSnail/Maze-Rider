@@ -3,12 +3,12 @@
 
 
 void interpret();
-bool movable(char tileChar);
-bool upStair(char tile);
-bool downStair(char tile);
-Parts isPart(char tile);
+bool movable(char tileChar);  //all tiles that can be transvered
+bool upStair(char tile);      //tile that moves up
+bool downStair(char tile);    //tile that moves down
+Parts isPart(char tile);      //checks if tile is a part
 
-bool validMoveGate(char tile, const char* gateType);
-bool isButton(char tile);
+bool validMoveGate(char tile, const char* gateType);  //validate if moving through directional gate
+bool isButton(char tile);     //returns if tile is a button
 
-char printtile(char tile);
+char printtile(char tile);    //unused

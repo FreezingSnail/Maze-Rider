@@ -57,8 +57,8 @@ int Character::getIndex(){
 }
 
 void Character::printChar() {
-  arduboy.setCursor(xFromQuadIndex(index), yFromQuadIndex(index));
-  arduboy.print(static_cast<char>(pgm_read_byte_near(charTile)));
+  arduboy.drawRect(xFromQuadIndex(index), yFromQuadIndex(index), 6, 7, BLACK);
+  arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), character, 6, 7, WHITE);
 }
 
 bool Character::didMoved(){
