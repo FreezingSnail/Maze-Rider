@@ -19,11 +19,10 @@ void GameEngine::draw(){
 
   
   for(uint8_t index = 0; index <= 188; ++index){
-    arduboy.setCursor(xFromQuadIndex(index), yFromQuadIndex(index));
-    arduboy.print(floorArray[index]);
+    //arduboy.setCursor(xFromQuadIndex(index), yFromQuadIndex(index));
+    drawBMP(floorArray[index], index);
   }
   
-
   character.printChar(); 
 }
 
@@ -58,6 +57,15 @@ bool GameEngine::Move(){
 void GameEngine::Update(){
   //unpackFloor();
   character.moveChar(Move());
+  if(Move()){
+    if(isButton(getCharAtCharacter())){
+      if(buttonPressed)
+        buttonPressed = false;
+      else 
+        buttonPressed = true;
+        gateOperation();
+    }
+  }
   //testfloor();
   
   if(upStair(getCharAtCharacter()) && character.didMoved()){
@@ -77,7 +85,6 @@ void GameEngine::Update(){
   pause();
 
   writeOver();
-  
   
 }
 
@@ -134,6 +141,7 @@ void GameEngine::pauseMenu(){
 }
 
 void GameEngine::pause(){
+
   if(arduboy.justPressed(A_BUTTON)){
       setState(GameState::MENU);}
   if(arduboy.justPressed(B_BUTTON)) {
@@ -151,35 +159,36 @@ void GameEngine::pause(){
 void GameEngine::printParts(){
   if(uniParts[0]){
     //printwheel}
-    arduboy.println(F("o"));
+  arduboy.drawBitmap(80,40, Wheel16, 16, 16, WHITE);
   }
   if(uniParts[1]){
     //print stem}
-    arduboy.println(F("l"));
+  arduboy.drawBitmap(80,20, Stem16, 16, 16, WHITE);
   }
   if(uniParts[2]){
     //print seat}
-    arduboy.println(F("~"));
+  arduboy.drawBitmap(80, 5, Seat16, 16, 16, WHITE);
   }
   if(uniParts[3]){
     //print peddels}
-    arduboy.println(F("="));
+  arduboy.drawBitmap(100, 30, Pedals16, 16, 16, WHITE);
   }
   if(uniParts[4]){
     //print crank}
-    arduboy.println(F("z"));
+  arduboy.drawBitmap(60, 30, Crank16, 16, 16, WHITE);
   }
 }
 
 void GameEngine::printMapInfo(){
-  arduboy.drawBitmap(0,0, pauseScreen, 121, 64, WHITE);
- 
+  //arduboy.drawBitmap(0,0, pauseScreen, 121, 64, WHITE);
+  drawFrame();
+  //drawSquare(30, 20, 3);
+  arduboy.setCursor(8,8);
   arduboy.print(F("Level: "));
   arduboy.println(level+1);
-
+  arduboy.setCursor(8,16);
   arduboy.print(F("Floor: "));
-  arduboy.println(floorLevel);
-  
+  arduboy.println(floorLevel); 
 }
 
 void GameEngine::nextLevel(){
@@ -205,15 +214,30 @@ void GameEngine::winScreen(){
 }
 
 void GameEngine::unpackFloor(){
-  for(uint8_t i = 0; i < 189; ++i)
+  hasButton = false;
+  buttonPressed = false;
+  for(uint8_t i = 0; i < 189; ++i){
     floorArray[i] = static_cast<char>(pgm_read_byte_near(&floors[level][floorLevel][i]));
+    if (isButton(pgm_read_byte_near(&floors[level][floorLevel][i])))
+      hasButton = true;
+  }
 }
 
-void GameEngine::replaceChar(char part){
+void GameEngine::replaceChar(char part, char replacement){
   for(uint8_t i = 0; i < 189; ++i){
         if(floorArray[i] == part)
-          floorArray[i] = static_cast<char>(pgm_read_byte_near(&open));
-      }
+          floorArray[i] = replacement;
+      }    
+}
+
+void GameEngine::gateOperation(){
+  if(buttonPressed)
+    replaceChar(static_cast<char>(pgm_read_byte_near(&CLOSEDGATE)), static_cast<char>(pgm_read_byte_near(&OPENGATE)));
+   else
+     replaceChar(static_cast<char>(pgm_read_byte_near(&OPENGATE)), static_cast<char>(pgm_read_byte_near(&CLOSEDGATE)));
+
+   
+    
 }
 
 void GameEngine::writeOver(){
@@ -224,16 +248,16 @@ void GameEngine::writeOver(){
 // z index   [4]
 
   if(uniParts[0]){
-      replaceChar(static_cast<char>(pgm_read_byte_near(&WHEEL)));
+      replaceChar(static_cast<char>(pgm_read_byte_near(&WHEEL)), static_cast<char>(pgm_read_byte_near(&OPENSPACE)));
   }
   if(uniParts[1])
-    replaceChar(static_cast<char>(pgm_read_byte_near(&STEM)));
+    replaceChar(static_cast<char>(pgm_read_byte_near(&STEM)), static_cast<char>(pgm_read_byte_near(&OPENSPACE)));
   if(uniParts[2])
-    replaceChar(static_cast<char>(pgm_read_byte_near(&SEAT)));    
+    replaceChar(static_cast<char>(pgm_read_byte_near(&SEAT)), static_cast<char>(pgm_read_byte_near(&OPENSPACE)));    
   if(uniParts[3])
-    replaceChar(static_cast<char>(pgm_read_byte_near(&PEDDELS))); 
+    replaceChar(static_cast<char>(pgm_read_byte_near(&PEDDELS)), static_cast<char>(pgm_read_byte_near(&OPENSPACE))); 
   if(uniParts[4])
-    replaceChar(static_cast<char>(pgm_read_byte_near(&CRANK)));
+    replaceChar(static_cast<char>(pgm_read_byte_near(&CRANK)), static_cast<char>(pgm_read_byte_near(&OPENSPACE)));
 }    
 
 
@@ -247,15 +271,16 @@ void GameEngine::nextLevelScreen(){
 }
 
 void GameEngine::levelSelect(){
-  for(int x = 1; x <= MAX_LEVEL; x++){
-    arduboy.print(F("Level "));
-    arduboy.println(x);
-  }
-  arduboy.println();
+  
   
   static int levelSelected = 1;
-  arduboy.print(F("Level selected: "));
-  arduboy.println(levelSelected);
+  arduboy.print(F("Level "));
+  if(levelsCleared[levelSelected]){
+    arduboy.println(levelSelected);
+  }
+  else {
+    arduboy.print(levelSelected); 
+    arduboy.println(F(" Locked"));}
 
   if(arduboy.justPressed(UP_BUTTON)) --levelSelected;
   if(arduboy.justPressed(DOWN_BUTTON)) ++levelSelected;
@@ -263,7 +288,7 @@ void GameEngine::levelSelect(){
   if(levelSelected < 1) levelSelected = MAX_LEVEL;
   if(levelSelected > MAX_LEVEL) levelSelected = 1;
 
-  if(arduboy.justPressed(B_BUTTON)) {
+  if(arduboy.justPressed(A_BUTTON)) {
     level = (levelSelected - 1);
     unpackFloor();
     STATE = GameState::MAZE;
@@ -271,3 +296,43 @@ void GameEngine::levelSelect(){
   
 }
 
+void GameEngine::drawBMP(char tile, uint8_t index){
+   if(tile == pgm_read_byte_near(DASH) || tile == pgm_read_byte_near(VERTICAL))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), walls, 6, 7, WHITE);
+   else if(tile == pgm_read_byte_near(DOWNSTAIR))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), DStair, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(UPSTAIR))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UStair, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(LEFTGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), LGate, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(RIGHTGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), RGate, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(UPGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UGate, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(DOWNGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), DGate, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(WHEEL))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UWheel, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(STEM))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UStem, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(SEAT))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), USeat, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(PEDDELS))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UPedals, 6, 7, WHITE);
+    else if(tile == pgm_read_byte_near(CRANK))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UCrank, 6, 7, WHITE);
+     else if(tile == pgm_read_byte_near(DOWNGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), DGate, 6, 7, WHITE);
+     else if(tile == pgm_read_byte_near(UPGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UGate, 6, 7, WHITE);
+     else if(tile == pgm_read_byte_near(CLOSEDGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), CGate, 6, 7, WHITE);
+     else if(tile == pgm_read_byte_near(OPENGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), OGate, 6, 7, WHITE);
+    else{
+      arduboy.setCursor(xFromQuadIndex(index), yFromQuadIndex(index));
+      arduboy.print(tile);
+    }
+
+
+}

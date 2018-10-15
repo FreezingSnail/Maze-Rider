@@ -19,7 +19,6 @@ void setup() {
 }
 
 
-
 void loop() {
 
 
@@ -33,7 +32,7 @@ void loop() {
   switch(game.getState()){
     case GameState::SPLASH:
       //print splashscreen function
-    arduboy.drawBitmap(0,0, splashScreen, 121, 64, WHITE);
+    arduboy.drawBitmap(0,0, splashScreen, 128, 64, WHITE);
       if(arduboy.justPressed(A_BUTTON))
         game.setState(GameState::SELECT);
      // if(arduboy.justPressed(B_BUTTON))

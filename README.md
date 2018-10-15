@@ -43,15 +43,13 @@ The important info:
 
 To Do:
 ---------
-* make inbetween screen for stages pleasent.
+
 * add saving level.
-* make level select not awful to look at.
-* implement art.
-* make pause screen not horrible.
 * add tutorial page.
 * write tutorial to add levels(ez pz);
 * better document code (never ending)
 * add levels (at least one with the gate)
+* Change scoring to level based.
 
 
 
@@ -70,4 +68,7 @@ Done:
 * add level select screen.
 * add level with gate tiles
 * add a button and gate tile (would need an aditional class prob). (It didn't)
-
+* make inbetween screen for stages pleasent.
+* make level select not awful to look at.
+* implement art.
+* make pause screen not horrible.
