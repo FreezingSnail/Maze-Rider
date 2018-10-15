@@ -49,6 +49,7 @@ To Do:
 * write tutorial to add levels(ez pz);
 * better document code (never ending)
 * add levels (at least one with the gate)
+* Change scoring to level based.
 
 
 
