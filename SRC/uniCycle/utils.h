@@ -48,5 +48,29 @@ inline uint8_t indexBelow(uint8_t indexFrom){
   return indexFrom + QUADWIDTH;
 }
 
+//Draw Utils
 
+
+inline void drawRow(int yAxis){
+  for(int count = 0; count < 22; ++count)
+    arduboy.drawBitmap(xFromQuadIndex(count), yAxis, walls, 6, 7, WHITE);
+}
+
+inline void drawColumn(int xAxis){
+  for(int count = 0; count < 9; ++count)
+    arduboy.drawBitmap(xAxis, (count * 7), walls, 6, 7, WHITE);
+}
+
+inline void drawFrame(){
+  drawColumn(0);
+  drawColumn(120);
+  drawRow(0);
+  drawRow(56);
+}
+
+inline void drawSquare(int x, int y, int dimension){
+  for(int vertical = 0; vertical < dimension; ++vertical)
+    for(int horizontal = 0; horizontal < dimension; ++horizontal)
+    arduboy.drawBitmap((x + (horizontal * 6)), (y + (vertical*7)), walls, 6, 7, WHITE);
+}
 

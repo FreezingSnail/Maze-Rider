@@ -58,7 +58,7 @@ int Character::getIndex(){
 
 void Character::printChar() {
   arduboy.drawRect(xFromQuadIndex(index), yFromQuadIndex(index), 6, 7, BLACK);
-  arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), character, 6, 7, WHITE);
+  arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), snail, 6, 7, WHITE);
 }
 
 bool Character::didMoved(){
@@ -79,4 +79,3 @@ void Character::newLevel(){
 int Character::getSteps(){
   return steps;
 }
-

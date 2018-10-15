@@ -141,6 +141,7 @@ void GameEngine::pauseMenu(){
 }
 
 void GameEngine::pause(){
+
   if(arduboy.justPressed(A_BUTTON)){
       setState(GameState::MENU);}
   if(arduboy.justPressed(B_BUTTON)) {
@@ -158,37 +159,36 @@ void GameEngine::pause(){
 void GameEngine::printParts(){
   if(uniParts[0]){
     //printwheel}
-    arduboy.println(F("o"));
+  arduboy.drawBitmap(80,40, Wheel16, 16, 16, WHITE);
   }
   if(uniParts[1]){
     //print stem}
-    arduboy.println(F("l"));
+  arduboy.drawBitmap(80,20, Stem16, 16, 16, WHITE);
   }
   if(uniParts[2]){
     //print seat}
-    arduboy.println(F("~"));
+  arduboy.drawBitmap(80, 5, Seat16, 16, 16, WHITE);
   }
   if(uniParts[3]){
     //print peddels}
-    arduboy.println(F("="));
+  arduboy.drawBitmap(100, 30, Pedals16, 16, 16, WHITE);
   }
   if(uniParts[4]){
     //print crank}
-    arduboy.println(F("z"));
+  arduboy.drawBitmap(60, 30, Crank16, 16, 16, WHITE);
   }
 }
 
 void GameEngine::printMapInfo(){
-  arduboy.drawBitmap(0,0, pauseScreen, 121, 64, WHITE);
- 
+  //arduboy.drawBitmap(0,0, pauseScreen, 121, 64, WHITE);
+  drawFrame();
+  //drawSquare(30, 20, 3);
+  arduboy.setCursor(8,8);
   arduboy.print(F("Level: "));
   arduboy.println(level+1);
-
+  arduboy.setCursor(8,16);
   arduboy.print(F("Floor: "));
-  arduboy.println(floorLevel);
-  arduboy.println(hasButton);
-  arduboy.println(buttonPressed);
-  
+  arduboy.println(floorLevel); 
 }
 
 void GameEngine::nextLevel(){
@@ -321,7 +321,18 @@ void GameEngine::drawBMP(char tile, uint8_t index){
       arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UPedals, 6, 7, WHITE);
     else if(tile == pgm_read_byte_near(CRANK))
       arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UCrank, 6, 7, WHITE);
+     else if(tile == pgm_read_byte_near(DOWNGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), DGate, 6, 7, WHITE);
+     else if(tile == pgm_read_byte_near(UPGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), UGate, 6, 7, WHITE);
+     else if(tile == pgm_read_byte_near(CLOSEDGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), CGate, 6, 7, WHITE);
+     else if(tile == pgm_read_byte_near(OPENGATE))
+      arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), OGate, 6, 7, WHITE);
+    else{
+      arduboy.setCursor(xFromQuadIndex(index), yFromQuadIndex(index));
+      arduboy.print(tile);
+    }
 
 
 }
-
