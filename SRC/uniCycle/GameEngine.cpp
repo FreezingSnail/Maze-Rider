@@ -200,8 +200,8 @@ void GameEngine::nextLevel(){
     unpackFloor();
     setState(GameState::NEXTLEVEL);
   }
-  else if(allParts() && level == MAX_LEVEL)
-    STATE = GameState::WIN;
+  else if(allParts() && level == MAX_LEVEL-1)
+    STATE = GameState::SELECT;
     
 }
 

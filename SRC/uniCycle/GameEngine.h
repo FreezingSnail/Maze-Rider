@@ -8,7 +8,7 @@
 class GameEngine{
   private:
     
-    const char * const *  floors[MAX_LEVEL] {testlevel, levelOne, levelTwo, levelThree};
+    const char * const *  floors[MAX_LEVEL] {levelOne, levelTwo, levelThree};
     Character character{};
     uint8_t level{ 0 };
     uint8_t floorLevel { 0 };
@@ -53,4 +53,3 @@ class GameEngine{
 
     
 };
-
