@@ -74,6 +74,7 @@ void Character::newLevel(){
   index = 73;
   xLoc = xFromQuadIndex(index);
   yLoc = yFromQuadIndex(index);
+  steps = 0;
 }
 
 int Character::getSteps(){

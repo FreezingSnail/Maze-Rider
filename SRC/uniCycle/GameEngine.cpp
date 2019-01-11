@@ -57,15 +57,16 @@ bool GameEngine::Move(){
 void GameEngine::Update(){
   //unpackFloor();
   character.moveChar(Move());
-  if(Move()){
-    if(isButton(getCharAtCharacter())){
+  
+    if(isButton(getCharAtCharacter()) && (character.didMoved())){
+      character.setMoved(false);
       if(buttonPressed)
         buttonPressed = false;
       else 
         buttonPressed = true;
-        gateOperation();
+      gateOperation();
     }
-  }
+  
   //testfloor();
   
   if(upStair(getCharAtCharacter()) && character.didMoved()){
@@ -143,10 +144,13 @@ void GameEngine::pauseMenu(){
 void GameEngine::pause(){
 
   if(arduboy.justPressed(A_BUTTON)){
-      setState(GameState::MENU);}
+      setState(GameState::MENU);
+  }
   if(arduboy.justPressed(B_BUTTON)) {
       setState(GameState::MAZE);
   }
+  if(arduboy.justPressed(B_BUTTON) && arduboy.justPressed(A_BUTTON))
+      setState(GameState::SELECT);
 }
 
 /*  wheel,
@@ -159,23 +163,23 @@ void GameEngine::pause(){
 void GameEngine::printParts(){
   if(uniParts[0]){
     //printwheel}
-  arduboy.drawBitmap(80,40, Wheel16, 16, 16, WHITE);
+    arduboy.drawBitmap(80,40, Wheel16, 16, 16, WHITE);
   }
   if(uniParts[1]){
     //print stem}
-  arduboy.drawBitmap(80,20, Stem16, 16, 16, WHITE);
+    arduboy.drawBitmap(80,20, Stem16, 16, 16, WHITE);
   }
   if(uniParts[2]){
     //print seat}
-  arduboy.drawBitmap(80, 5, Seat16, 16, 16, WHITE);
+    arduboy.drawBitmap(80, 5, Seat16, 16, 16, WHITE);
   }
   if(uniParts[3]){
     //print peddels}
-  arduboy.drawBitmap(100, 30, Pedals16, 16, 16, WHITE);
+    arduboy.drawBitmap(100, 30, Pedals16, 16, 16, WHITE);
   }
   if(uniParts[4]){
     //print crank}
-  arduboy.drawBitmap(60, 30, Crank16, 16, 16, WHITE);
+    arduboy.drawBitmap(60, 30, Crank16, 16, 16, WHITE);
   }
 }
 
@@ -188,11 +192,24 @@ void GameEngine::printMapInfo(){
   arduboy.println(level+1);
   arduboy.setCursor(8,16);
   arduboy.print(F("Floor: "));
-  arduboy.println(floorLevel); 
+  arduboy.print(floorLevel); 
+  arduboy.setCursor(8,24);
+  arduboy.print(F("Out of: "));
+  arduboy.println(numOfFloors[level]);
+
 }
+
+void GameEngine::highscoreUpdate(){
+  if(minSteps[level] == -1)
+    minSteps[level] = character.getSteps();
+  else if(minSteps[level] > character.getSteps())
+    minSteps[level] = character.getSteps();
+}
+
 
 void GameEngine::nextLevel(){
   if(allParts()){
+    highscoreUpdate();
     character.newLevel();
     resetParts();
     floorLevel = 0;
@@ -271,25 +288,34 @@ void GameEngine::nextLevelScreen(){
 }
 
 void GameEngine::levelSelect(){
-  
-  
-  static int levelSelected = 1;
+  drawFrame();
+  static int levelSelected = 0;
+  arduboy.setCursor(8,8);
   arduboy.print(F("Level "));
   if(levelsCleared[levelSelected]){
-    arduboy.println(levelSelected);
+    arduboy.println(levelSelected+1);
+    arduboy.setCursor(8,16);
+    if(minSteps[levelSelected]>0){
+      arduboy.print(F("Least Steps: "));
+      arduboy.println(minSteps[levelSelected]);
+    }
+    else
+    arduboy.println(F("Unlocked"));
   }
   else {
-    arduboy.print(levelSelected); 
-    arduboy.println(F(" Locked"));}
+    arduboy.print(levelSelected +1); 
+    arduboy.setCursor(8,16);
+    arduboy.println(F("Locked"));
+  }
 
   if(arduboy.justPressed(UP_BUTTON)) --levelSelected;
   if(arduboy.justPressed(DOWN_BUTTON)) ++levelSelected;
 
-  if(levelSelected < 1) levelSelected = MAX_LEVEL;
-  if(levelSelected > MAX_LEVEL) levelSelected = 1;
+  if(levelSelected < 0) levelSelected = MAX_LEVEL-1;
+  if(levelSelected > MAX_LEVEL-1) levelSelected = 0;
 
   if(arduboy.justPressed(A_BUTTON)) {
-    level = (levelSelected - 1);
+    level = (levelSelected);
     unpackFloor();
     STATE = GameState::MAZE;
   }

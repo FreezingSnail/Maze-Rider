@@ -7,15 +7,16 @@
 
 class GameEngine{
   private:
-    
-    const char * const *  floors[MAX_LEVEL] {levelOne, levelTwo, levelThree};
+
+    int minSteps[MAX_LEVEL] {-1, -1, -1,-1, -1, -1,-1};
+    const char * const *  floors[MAX_LEVEL] {/*testlevel,*/ introOne, introTwo, introThree, levelFour, levelOne, levelTwo, levelThree};
     Character character{};
     uint8_t level{ 0 };
     uint8_t floorLevel { 0 };
     bool uniParts[5] = { false, false, false, false, false };
     char floorArray[190] {};
     GameState STATE { GameState::SPLASH };
-    bool levelsCleared[MAX_LEVEL] { true,true,true};
+    bool levelsCleared[MAX_LEVEL] { /*true,true,true,true,true,true,true,*/true, false, false, false, false, false, false};
     bool hasButton {false};
     bool buttonPressed {false};
 
@@ -34,8 +35,9 @@ class GameEngine{
     void unpackFloor();           //load floor data into ram
     void replaceChar(char part, char replacement);  //replace part tile with blank tile
     void writeOver();             //check to see if part tiles need to be written over
-    void gateOperation();         //Swaps gate tile on button press    ￼
+    void gateOperation();         //Swaps gate tile on button press    
     void drawBMP(char tile, uint8_t index); //Draws correct tileBMP from char
+    void highscoreUpdate();       //check if steps score beat previous
 
   public:
     GameEngine();                 //constructor
