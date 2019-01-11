@@ -5,7 +5,14 @@ This is a simple maze wandering game where you seek the 5 pieces of a unicycle. 
 
 The important info:
 
-    Character: C
+    Character: SnailGuy
+    
+    Buttons:
+    --------
+    DPad: move in that direction
+    A: select/ pause menu ingame
+    B: exit pause menu
+    A + B: return to level select while in game
     
     Move between floor tiles:
     -------------------------
@@ -49,7 +56,9 @@ To Do:
 * write tutorial to add levels(ez pz);
 * better document code (never ending)
 * add levels (at least one with the gate)
-* Change scoring to level based.
+* implement EEPROM saving of unlocked levels and scores
+* fix the faq to show the tiles not the character encodings
+
 
 
 
@@ -58,6 +67,7 @@ Maybes:
 * add a background music theme.
 * write a cheeseball story page.
 * add pushable tile.
+* add RLE to the levels to save extra memory 
 
 
 
@@ -72,3 +82,4 @@ Done:
 * make level select not awful to look at.
 * implement art.
 * make pause screen not horrible.
+* Change scoring to level based.
