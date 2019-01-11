@@ -57,7 +57,7 @@ int Character::getIndex(){
 }
 
 void Character::printChar() {
-  arduboy.drawRect(xFromQuadIndex(index), yFromQuadIndex(index), 6, 7, BLACK);
+  arduboy.fillRect(xFromQuadIndex(index), yFromQuadIndex(index), 6, 7, BLACK);
   arduboy.drawBitmap(xFromQuadIndex(index), yFromQuadIndex(index), snail, 6, 7, WHITE);
 }
 
