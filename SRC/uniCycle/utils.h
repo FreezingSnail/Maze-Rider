@@ -74,3 +74,5 @@ inline void drawSquare(int x, int y, int dimension){
     arduboy.drawBitmap((x + (horizontal * 6)), (y + (vertical*7)), walls, 6, 7, WHITE);
 }
 
+
+

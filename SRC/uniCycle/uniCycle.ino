@@ -1,11 +1,7 @@
 //#include <Arduboy2.h>
 #include "Globals.h"  
 #include "GameEngine.h"
-#include "Character.h"
-#include "TileInterpreter.h"
-#include "utils.h"
-#include "Quads.h"
-#include "bmp.h"
+#include "EEPROM.h"
 // Arduboy2 arduboy; 
 
 GameEngine game = GameEngine();
@@ -15,7 +11,7 @@ void setup() {
   arduboy.begin();
   arduboy.setFrameRate(30);
   arduboy.clear();
-  
+  initEEPROM();
 }
 
 
@@ -32,7 +28,7 @@ void loop() {
   switch(game.getState()){
     case GameState::SPLASH:
       //print splashscreen function
-    arduboy.drawBitmap(0,0, splashScreen, 128, 64, WHITE);
+      arduboy.drawBitmap(0,0, splashScreen, 128, 64, WHITE);
       if(arduboy.justPressed(A_BUTTON))
         game.setState(GameState::SELECT);
      // if(arduboy.justPressed(B_BUTTON))
