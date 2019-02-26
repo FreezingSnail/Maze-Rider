@@ -1,71 +1,49 @@
 #include "EEPROM.h"
 
-void initEEPROM() {
+void initEEPROM()
+{
+	uint16_t * eepromStartPointer = reinterpret_cast<uint16_t *>(eepromStart);
 
-  uint8_t c1 = EEPROM.read(EEPROM_START_C1);
-  uint8_t c2 = EEPROM.read(EEPROM_START_C2);
+	// Read save id
+	uint16_t saveId = eeprom_read_word(eepromStartPointer);
 
-  if(c1 != 1 || c2 != 1) 
-  {    
-      EEPROM.update(EEPROM_START_C1, 1);
-      EEPROM.update(EEPROM_START_C2, 1);
-      {
-          uint16_t eepromIndex = EEPROM_arrayOneSaveLocationClears;
-          for(uint8_t index = 0; index < 8; ++index)
-          {
-            EEPROM.put(eepromIndex, levelsCleared[index]);
-            ++eepromIndex;
-          }
-      }
-      {
-          uint16_t  eepromIndex = EEPROM_arrayTwoSaveLocationSteps;
-          for(uint8_t index = 0; index < MaxLevel; ++index)
-          {
-            EEPROM.put(eepromIndex, minSteps[index]);
-            eepromIndex += sizeof(minSteps[0]);
-          }
-      }
-      //EEPROM.put(EEPROM_arrayOneSaveLocationClears, levelsCleared); //bool array of levels beaten
-      //EEPROM.put(EEPROM_arrayTwoSaveLocationSteps, minSteps);       //uint16_t array of number of steps taken  
-  }
-  else
-  {
-    {
-      const uint16_t * eepromPointer = reinterpret_cast<const uint16_t *>(EEPROM_arrayTwoSaveLocationSteps);
-      for(uint8_t index = 0; index < MaxLevel; ++index)
-      {
-        minSteps[index] = eeprom_read_word(eepromPointer);
-        ++eepromPointer;
-      }
-    }
-      const uint8_t * eepromPointer = reinterpret_cast<const uint8_t *>(EEPROM_arrayOneSaveLocationClears);  //bit array
-      for(uint8_t index = 0; index < 8; ++index)
-      {
-        levelsCleared[index] = eeprom_read_byte(eepromPointer);
-        ++eepromPointer;
-      }
-
-  }
+	// If save id matches
+	if(saveId == eepromSaveId) 
+	{
+		// Load data
+		loadEEPROMLevel();
+		loadEEPROMSteps();
+	}
+	else
+	{
+		// Else reset eeprom
+		eeprom_write_word(eepromStartPointer, eepromSaveId);
+		
+		saveEEPROMLevel();
+		saveEEPROMSteps();
+	}
 }
 
 void saveEEPROMLevel()
 {
-   uint8_t eepromIndex = EEPROM_arrayOneSaveLocationClears;
-      for(uint8_t index = 0; index < MaxLevel; ++index)
-      {
-        EEPROM.update(eepromIndex, levelsCleared[index]);
-        ++eepromIndex;
-      }
-  
+	uint8_t * eepromLevelsPointer = reinterpret_cast<uint8_t *>(eepromLevelDataStart);
+	eeprom_update_block(levelsCleared, eepromLevelsPointer, sizeof(levelsCleared));
+}
+
+void loadEEPROMLevel()
+{
+	const uint8_t * eepromLevelsPointer = reinterpret_cast<const uint8_t *>(eepromLevelDataStart);
+	eeprom_read_block(levelsCleared, eepromLevelsPointer, sizeof(levelsCleared));
 }
 
 void saveEEPROMSteps()
 {
-  uint8_t  eepromIndex = EEPROM_arrayTwoSaveLocationSteps;
-      for(uint8_t index = 0; index < MaxLevel; ++index)
-      {
-        EEPROM.put(eepromIndex, minSteps[index]);
-        eepromIndex += sizeof(minSteps[0]);
-      }
+	uint16_t * eepromStepsPointer = reinterpret_cast<uint16_t *>(eepromStepDataStart);
+	eeprom_update_block(minSteps, eepromStepsPointer, sizeof(minSteps));
 }
 
+void loadEEPROMSteps()
+{
+	const uint16_t * eepromStepsPointer = reinterpret_cast<const uint16_t *>(eepromStepDataStart);
+	eeprom_read_block(minSteps, eepromStepsPointer, sizeof(minSteps));
+}
