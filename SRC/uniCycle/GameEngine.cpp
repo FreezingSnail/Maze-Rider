@@ -169,6 +169,7 @@ void GameEngine::pause(){
   */
 void GameEngine::printParts(){
   if(uniParts[0]){
+    
     //printwheel}
     arduboy.drawBitmap(80,40, Wheel16, 16, 16, WHITE);
   }
@@ -216,7 +217,7 @@ void GameEngine::highscoreUpdate(){
     saveEEPROMSteps();
   }
 
-  if(bitRead(levelsCleared[(level+1)%8], (level+1)%8)==false){
+  if(bitRead(levelsCleared[(level+1)%8], (level+1)%8)==0){
     bitSet(levelsCleared[(level+1)%8], (level+1)%8);
     saveEEPROMLevel();
   }
@@ -225,8 +226,9 @@ void GameEngine::highscoreUpdate(){
 
 void GameEngine::nextLevel(){
   if(allParts() && level == MaxLevel-1){
-    STATE = GameState::SELECT;
     highscoreUpdate();
+    STATE = GameState::SELECT;
+    
   }
   else if(allParts()){
     highscoreUpdate();
