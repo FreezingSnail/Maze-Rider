@@ -3,12 +3,15 @@
 #include "Globals.h"
 #include "TileInterpreter.h"
 #include "bmp.h"
+#include "EEPROM.h"
 
 // ~ index 95 x2  [0]
 // o index 46 x3  [1]
 // l index 0 x4   [2]
 // = index 161 x5 [3]
 // z index 17 x4  [4]
+
+
 
 GameEngine::GameEngine(){
   unpackFloor();
@@ -149,8 +152,12 @@ void GameEngine::pause(){
   if(arduboy.justPressed(B_BUTTON)) {
       setState(GameState::MAZE);
   }
-  if(arduboy.justPressed(B_BUTTON) && arduboy.justPressed(A_BUTTON))
+  if(arduboy.justPressed(B_BUTTON) && arduboy.justPressed(A_BUTTON)){
+      character.newLevel();
+      resetParts();
+      floorLevel = 0;
       setState(GameState::SELECT);
+  }
 }
 
 /*  wheel,
@@ -192,7 +199,7 @@ void GameEngine::printMapInfo(){
   arduboy.println(level+1);
   arduboy.setCursor(8,16);
   arduboy.print(F("Floor: "));
-  arduboy.print(floorLevel); 
+  arduboy.print(floorLevel+1); 
   arduboy.setCursor(8,24);
   arduboy.print(F("Out of: "));
   arduboy.println(numOfFloors[level]);
@@ -200,25 +207,38 @@ void GameEngine::printMapInfo(){
 }
 
 void GameEngine::highscoreUpdate(){
-  if(minSteps[level] == -1)
+  if(minSteps[level] == 0){
     minSteps[level] = character.getSteps();
-  else if(minSteps[level] > character.getSteps())
+    saveEEPROMSteps();
+  }
+  else if(minSteps[level] > character.getSteps()){
     minSteps[level] = character.getSteps();
+    saveEEPROMSteps();
+  }
+
+  if(bitRead(levelsCleared[(level+1)%8], (level+1)%8)==false){
+    bitSet(levelsCleared[(level+1)%8], (level+1)%8);
+    saveEEPROMLevel();
+  }
 }
 
 
 void GameEngine::nextLevel(){
-  if(allParts()){
+  if(allParts() && level == MaxLevel-1){
+    STATE = GameState::SELECT;
+    highscoreUpdate();
+  }
+  else if(allParts()){
     highscoreUpdate();
     character.newLevel();
     resetParts();
     floorLevel = 0;
+    //levelsCleared[level] = true;
     ++level;
     unpackFloor();
     setState(GameState::NEXTLEVEL);
   }
-  else if(allParts() && level == MAX_LEVEL-1)
-    STATE = GameState::SELECT;
+
     
 }
 
@@ -282,6 +302,8 @@ void GameEngine::nextLevelScreen(){
   arduboy.print(F("Entering Level: "));
   arduboy.println(level + 1);
   arduboy.println(F("A to continue."));
+
+ 
   if(arduboy.justPressed(A_BUTTON)){
     setState(GameState::MAZE);
   }
@@ -292,7 +314,7 @@ void GameEngine::levelSelect(){
   static int levelSelected = 0;
   arduboy.setCursor(8,8);
   arduboy.print(F("Level "));
-  if(levelsCleared[levelSelected]){
+  if(bitRead(levelsCleared[levelSelected%8], levelSelected%8)){
     arduboy.println(levelSelected+1);
     arduboy.setCursor(8,16);
     if(minSteps[levelSelected]>0){
@@ -305,16 +327,16 @@ void GameEngine::levelSelect(){
   else {
     arduboy.print(levelSelected +1); 
     arduboy.setCursor(8,16);
-    arduboy.println(F("Locked"));
+    arduboy.println(F(" Locked"));
   }
 
   if(arduboy.justPressed(UP_BUTTON)) --levelSelected;
   if(arduboy.justPressed(DOWN_BUTTON)) ++levelSelected;
 
-  if(levelSelected < 0) levelSelected = MAX_LEVEL-1;
-  if(levelSelected > MAX_LEVEL-1) levelSelected = 0;
+  if(levelSelected < 0) levelSelected = MaxLevel-1;
+  if(levelSelected > MaxLevel-1) levelSelected = 0;
 
-  if(arduboy.justPressed(A_BUTTON)) {
+  if(arduboy.justPressed(A_BUTTON) && bitRead(levelsCleared[levelSelected%8], levelSelected%8)) {
     level = (levelSelected);
     unpackFloor();
     STATE = GameState::MAZE;
